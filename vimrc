@@ -1,4 +1,4 @@
-" Loading defaults.vim
+" Loading defaults.vim (:h defaults.vim)
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
