@@ -1,3 +1,4 @@
 [submodule "vim-plugin-manually/opt/vimdoc-ja"]
 	path = vim-plugin-manually/opt/vimdoc-ja
 	url = https://github.com/vim-jp/vimdoc-ja.git
+	ignore = dirty
