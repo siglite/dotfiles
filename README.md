@@ -6,6 +6,13 @@
 $ git clone --recursive https://github.com/siglite/dotfiles ~/.dotfiles
 ```
 
+### Bash
+
+```console
+$ [ -e ~/.profile ] && mv ~/.profile ~/.profile.old
+$ ln -s .dotfiles/.profile ~/
+```
+
 ### Vim
 
 ```console
