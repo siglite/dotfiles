@@ -5,6 +5,9 @@ case $- in
       *) return;;   # Other case, don't do anything.
 esac
 
+# umask
+umask 072
+
 # Prompt (if not set)
 [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \w]\$ "
 
@@ -28,13 +31,12 @@ unset RVM rvm_stored_umask
 for ENVLINE in $(env); do
     ENVKEY="${ENVLINE%%=*}"
     case "$ENVKEY" in
+        PERL*) unset "$ENVKEY" ;;
          KDE*) unset "$ENVKEY" ;;
           QT*) unset "$ENVKEY" ;;
-         GDL*) unset "$ENVKEY" ;;
-        PERL*) unset "$ENVKEY" ;;
     esac
 done
 PATH="${PATH#/usr/lib64/qt-3.3/bin:}"
 PATH="${PATH#$HOME/perl5/bin:}"
+unset GDL_PATH HARDWARE_PLATFORM
 unset ENVLINE ENVKEY
-
