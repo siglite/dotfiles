@@ -1,8 +1,8 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
 case $- in
-    *i*) ;;         # Login/Interactive shell
-      *) return;;   # Other case, don't do anything
+    *i*) ;;         # Login/Interactive shell.
+      *) return;;   # Other case, don't do anything.
 esac
 
 # Prompt (if not set)
@@ -10,5 +10,28 @@ esac
 
 # History
 shopt -s histappend
-export HISTSIZE=10000
-export HISTCONTROL=ignoreboth
+HISTSIZE=10000
+HISTFILESIZE=20000
+HISTCONTROL=ignoreboth
+
+# Disable RVM on XREA
+RVM="$HOME/.rvm/scripts/rvm"
+if [ ! -s "$RVM" ]; then
+    # mkdir ~/.rvm/scrips if not exists.
+    [ ! -d "${RVM%/*}" ] && mkdir -p "${RVM%/*}"
+    echo '#!/bin/bash' > "$RVM"
+    echo "# Don't do anything." >> "$RVM"
+fi
+unset RVM rvm_stored_umask
+
+# Revert environment
+for ENVLINE in $(env); do
+    ENVKEY="${ENVLINE%%=*}"
+    case "$ENVKEY" in
+         KDE*) unset "$ENVKEY";;    # /etc/profile.d/kde.sh
+          QT*) unset "$ENVKEY";;    # /etc/profile.d/{kde,qt}.sh
+    esac
+done
+unset GDL_PATH HARDWARE_PLATFORM
+unset ENVLINE ENVKEY
+
