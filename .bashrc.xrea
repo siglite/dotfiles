@@ -18,6 +18,9 @@ HISTSIZE=10000
 HISTFILESIZE=20000
 HISTCONTROL=ignoreboth
 
+# misc
+unset MAILCHECK
+
 # Disable RVM on XREA
 RVM="$HOME/.rvm/scripts/rvm"
 if [ ! -s "$RVM" ]; then
@@ -26,9 +29,11 @@ if [ ! -s "$RVM" ]; then
     echo '#!/bin/bash' > "$RVM"
     echo "# Don't do anything." >> "$RVM"
 fi
-unset RVM rvm_stored_umask
+unset RVM rvm_stored_umask rvm_path file
 
 # Revert environment
+unset GDL_PATH HARDWARE_PLATFORM MODULEPATH MODULESHOME LOADEDMODULES
+unset module _module _module_avail _module_long_arg_list _module_not_yet_loaded
 for ENVLINE in $(env); do
     ENVKEY="${ENVLINE%%=*}"
     case "$ENVKEY" in
@@ -39,5 +44,5 @@ for ENVLINE in $(env); do
 done
 PATH="${PATH#/usr/lib64/qt-3.3/bin:}"
 PATH="${PATH#$HOME/perl5/bin:}"
-unset GDL_PATH HARDWARE_PLATFORM
 unset ENVLINE ENVKEY
+
