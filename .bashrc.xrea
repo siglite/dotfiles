@@ -7,3 +7,8 @@ esac
 
 # Prompt (if not set)
 [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \w]\$ "
+
+# History
+shopt -s histappend
+export HISTSIZE=10000
+export HISTCONTROL=ignoreboth
