@@ -12,6 +12,7 @@ umask 072
 [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \w]\$ "
 
 # History
+unset HISTSIZE HISTFILESIZE HISTCONTROL
 shopt -s histappend
 HISTSIZE=10000
 HISTFILESIZE=20000
