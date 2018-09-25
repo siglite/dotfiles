@@ -1,0 +1,9 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+case $- in
+    *i*) ;;         # Login/Interactive shell
+      *) return;;   # Other case, don't do anything
+esac
+
+# Prompt (if not set)
+[ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \w]\$ "
