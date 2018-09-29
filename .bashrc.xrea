@@ -30,12 +30,12 @@ RVM="${HOME}/.rvm/scripts/rvm"
 if [ ! -s "$RVM" ]; then
     local RVM_USER_DIR="${RVM%/*}"  # => ~/.rvm/scrips
     [ ! -d "$RVM_USER_DIR" ] && mkdir -p "$RVM_USER_DIR"
-    cat <<-EOS > "$RVM"
+	cat <<-EOS > "$RVM"
 	#!/bin/bash
 	umask "$rvm_stored_umask"
 	unset rvm_stored_umask file rvm_path
 	# Don't do anything.
-    EOS
+	EOS
     echo "[INFO] bashrc: RVM disabled, maybe need reconnect."
 fi
 unset RVM
