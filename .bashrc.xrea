@@ -28,7 +28,7 @@ unset MAILCHECK
 # Disable RVM on XREA
 RVM="${HOME}/.rvm/scripts/rvm"
 if [ ! -s "$RVM" ]; then
-    local RVM_USER_DIR="${RVM%/*}"  # => ~/.rvm/scrips
+    RVM_USER_DIR="${RVM%/*}"  # => ~/.rvm/scrips
     [ ! -d "$RVM_USER_DIR" ] && mkdir -p "$RVM_USER_DIR"
 	cat <<-EOS > "$RVM"
 	#!/bin/bash
@@ -38,7 +38,7 @@ if [ ! -s "$RVM" ]; then
 	EOS
     echo "[INFO] bashrc: RVM disabled, maybe need reconnect."
 fi
-unset RVM
+unset RVM RVM_USER_DIR
 
 # Revert environment
 unset GDL_PATH HARDWARE_PLATFORM
