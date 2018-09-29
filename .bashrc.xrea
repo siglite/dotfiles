@@ -21,32 +21,42 @@ HISTCONTROL=ignoreboth
 # misc
 unset MAILCHECK
 
-disable_rvm() {
-    local RVM_USER_DIR="${HOME}/.rvm/scripts"
+#
+# XREA specific configurations
+#
+
+# Disable RVM on XREA
+RVM="${HOME}/.rvm/scripts/rvm"
+if [ ! -s "$RVM" ]; then
+    local RVM_USER_DIR="${RVM%/*}"  # => ~/.rvm/scrips
     [ ! -d "$RVM_USER_DIR" ] && mkdir -p "$RVM_USER_DIR"
-    cat <<-EOS > "$RVM_USER_DIR/rvm"
+    cat <<-EOS > "$RVM"
 	#!/bin/bash
 	umask "$rvm_stored_umask"
 	unset rvm_stored_umask file rvm_path
 	# Don't do anything.
     EOS
     echo "[INFO] bashrc: RVM disabled, maybe need reconnect."
-}
-
-[ ! -s "${HOME}/.rvm/scripts/rvm" ] && disable_rvm
-unset disable_rvm
+fi
+unset RVM
 
 # Revert environment
-unset GDL_PATH HARDWARE_PLATFORM MODULEPATH MODULESHOME LOADEDMODULES
-unset module _module _module_avail _module_long_arg_list _module_not_yet_loaded
+unset GDL_PATH HARDWARE_PLATFORM
+for FUNCLINE in $(typeset -F | cut -d ' ' -f 3); do
+    if [[ "$FUNCLINE" =~ ^_?module ]]; then
+        echo $FUNCLINE
+        unset "$FUNCLINE"
+    fi
+done
 for ENVLINE in $(env); do
     ENVKEY="${ENVLINE%%=*}"
     case "$ENVKEY" in
-        PERL*) unset "$ENVKEY" ;;
-         KDE*) unset "$ENVKEY" ;;
-          QT*) unset "$ENVKEY" ;;
+        *MODULE*) unset "$ENVKEY" ;;
+           PERL*) unset "$ENVKEY" ;;
+            KDE*) unset "$ENVKEY" ;;
+             QT*) unset "$ENVKEY" ;;
     esac
 done
-unset ENVLINE ENVKEY
+unset FUNCLINE ENVLINE ENVKEY
 PATH="${PATH#/usr/lib64/qt-3.3/bin:}"
 PATH="${PATH#$HOME/perl5/bin:}"
