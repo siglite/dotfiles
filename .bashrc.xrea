@@ -32,7 +32,7 @@ if [ ! -s "$RVM" ]; then
     [ ! -d "$RVM_USER_DIR" ] && mkdir -p "$RVM_USER_DIR"
 	cat <<-EOS > "$RVM"
 	#!/bin/bash
-	umask "$rvm_stored_umask"
+	umask "\$rvm_stored_umask"
 	unset rvm_stored_umask file rvm_path
 	# Don't do anything.
 	EOS
