@@ -30,7 +30,7 @@ RVM="${HOME}/.rvm/scripts/rvm"
 if [ ! -s "$RVM" ]; then
     RVM_USER_DIR="${RVM%/*}"  # => ~/.rvm/scrips
     [ ! -d "$RVM_USER_DIR" ] && mkdir -p "$RVM_USER_DIR"
-	cat <<-EOS > "$RVM"
+    cat <<-EOS > "$RVM"
 	#!/bin/bash
 	umask "\$rvm_stored_umask"
 	unset rvm_stored_umask file rvm_path
@@ -40,14 +40,7 @@ if [ ! -s "$RVM" ]; then
 fi
 unset RVM RVM_USER_DIR
 
-# Revert environment
-unset GDL_PATH HARDWARE_PLATFORM
-for FUNCLINE in $(typeset -F | cut -d ' ' -f 3); do
-    if [[ "$FUNCLINE" =~ ^_?module ]]; then
-        echo $FUNCLINE
-        unset "$FUNCLINE"
-    fi
-done
+# Revert environments
 for ENVLINE in $(env); do
     ENVKEY="${ENVLINE%%=*}"
     case "$ENVKEY" in
@@ -57,6 +50,17 @@ for ENVLINE in $(env); do
              QT*) unset "$ENVKEY" ;;
     esac
 done
-unset FUNCLINE ENVLINE ENVKEY
+unset GDL_PATH HARDWARE_PLATFORM
+unset ENVLINE ENVKEY
+
+# Revert shell functions
+for FUNC in $(typeset -F | cut -d ' ' -f 3); do
+    if [[ "$FUNC" =~ ^_?module ]]; then
+        unset "$FUNC"
+    fi
+done
+unset FUNC
+
+# Remove unused PATH
 PATH="${PATH#/usr/lib64/qt-3.3/bin:}"
 PATH="${PATH#$HOME/perl5/bin:}"
