@@ -6,7 +6,7 @@ case $- in
 esac
 
 # umask
-umask 072
+umask 062
 
 # Prompt (if not set)
 [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \w]\$ "
@@ -21,15 +21,20 @@ HISTCONTROL=ignoreboth
 # misc
 unset MAILCHECK
 
-# Disable RVM on XREA
-RVM="$HOME/.rvm/scripts/rvm"
-if [ ! -s "$RVM" ]; then
-    # mkdir ~/.rvm/scrips if not exists.
-    [ ! -d "${RVM%/*}" ] && mkdir -p "${RVM%/*}"
-    echo '#!/bin/bash' > "$RVM"
-    echo "# Don't do anything." >> "$RVM"
-fi
-unset RVM rvm_stored_umask rvm_path file
+disable_rvm() {
+    local RVM_USER_DIR="${HOME}/.rvm/scripts"
+    [ ! -d "$RVM_USER_DIR" ] && mkdir -p "$RVM_USER_DIR"
+    cat <<-EOS > "$RVM_USER_DIR/rvm"
+	#!/bin/bash
+	umask "$rvm_stored_umask"
+	unset rvm_stored_umask file rvm_path
+	# Don't do anything.
+    EOS
+    echo "[INFO] bashrc: RVM disabled, maybe need reconnect."
+}
+
+[ ! -s "${HOME}/.rvm/scripts/rvm" ] && disable_rvm
+unset disable_rvm
 
 # Revert environment
 unset GDL_PATH HARDWARE_PLATFORM MODULEPATH MODULESHOME LOADEDMODULES
@@ -42,7 +47,6 @@ for ENVLINE in $(env); do
           QT*) unset "$ENVKEY" ;;
     esac
 done
+unset ENVLINE ENVKEY
 PATH="${PATH#/usr/lib64/qt-3.3/bin:}"
 PATH="${PATH#$HOME/perl5/bin:}"
-unset ENVLINE ENVKEY
-
