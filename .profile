@@ -3,9 +3,12 @@
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
-    if [ -f "$HOME/.bashrc" ]; then
-        . "$HOME/.bashrc"
+    # set $DOTFILES if not defined (normally not defined)
+    DOTFILES="${DOTFILES:-"$(dirname $(realpath "${BASH_SOURCE:-$0}"))"}"
+    if [ -f "${DOTFILES:="$HOME"}/.bashrc" ]; then
+        . "$DOTFILES/.bashrc"
     fi
+    unset DOTFILES
 fi
 
 # set PATH so it includes user's private bin if it exists
