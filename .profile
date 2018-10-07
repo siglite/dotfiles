@@ -3,9 +3,13 @@
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
-    # set $DOTFILES if not defined (normally not defined)
+    if [ -z "$(command -v realpath)" ]; then
+        # if `realpath` not exists, fallback to HOME
+        DOTFILES="${DOTFILES:-$HOME}"
+    fi
+    # set DOTFILES if not defined (normally not defined)
     DOTFILES="${DOTFILES:-"$(dirname $(realpath "${BASH_SOURCE:-$0}"))"}"
-    if [ -f "${DOTFILES:="$HOME"}/.bashrc" ]; then
+    if [ -r "$DOTFILES/.bashrc" ]; then
         . "$DOTFILES/.bashrc"
     fi
     unset DOTFILES
